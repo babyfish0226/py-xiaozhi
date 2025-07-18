@@ -8,7 +8,6 @@
     "onefile": false,
     "additional_pyinstaller_args": "--add-data assets;assets --add-data libs;libs --add-data src;src --add-data models;models --hidden-import=PyQt5",
     "inno_setup_path": "C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe",
-	
     "platform_specific": {
         "windows": {
             "format": "exe",
@@ -23,8 +22,7 @@
                 "readme_file": "README.md",
                 "create_desktop_icon": true,
                 "allow_run_after_install": true,
-				"default_dir": "{userappdata}\\xiaozhi" 
-
+                "default_dir": "{userappdata}\\xiaozhi"
             }
         }
     },
