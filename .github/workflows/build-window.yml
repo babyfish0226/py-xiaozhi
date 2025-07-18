@@ -43,7 +43,7 @@ jobs:
         shell: powershell
 
       # 查找 ISCC.exe 路径并更新 build.json
-           - name: 查找 ISCC.exe 路径并更新 build.json
+         - name: 查找 ISCC.exe 路径并更新 build.json
         run: |
           $isccPath = Get-Command ISCC.exe | Select-Object -ExpandProperty Source
           $envLine = "ISCC_PATH=$($isccPath)"
