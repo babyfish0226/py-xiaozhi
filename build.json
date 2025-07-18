@@ -22,7 +22,7 @@
                 "license_file": "LICENSE",
                 "readme_file": "README.md",
                 "create_desktop_icon": true,
-                "allow_run_after_install": true
+                "allow_run_after_install": true,
 				"default_dir": "{userappdata}\\xiaozhi" 
 
             }
