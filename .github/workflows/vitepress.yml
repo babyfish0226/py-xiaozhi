@@ -1,49 +1,53 @@
-# workflow 名称，可以自定义
 name: Deploy GitHub Pages
 
-# 触发条件：在代码 push 到 master 分支后，自动执行该 workflow
+# 觸發條件：在推送到 main 分支時執行
 on:
   push:
     branches:
       - main
-    permissions:
-  contents: write  # Grant write access to repository contents
 
-# 任务
+# 設置全局權限
+permissions:
+  contents: write  # 授予寫入儲存庫內容的權限
+
 jobs:
   build-and-deploy:
-    # 服务器环境：最新版 Ubuntu，也可以自定义版本
     runs-on: ubuntu-latest
     steps:
-      # 拉取代码
+      # 拉取代碼
       - name: Checkout
-        uses: actions/checkout@v2
-        with: 
-          fetch-depth: 0
-          target_branch: gh-pages  # Corrected from target-branch
+        uses: actions/checkout@v4  # 升級到最新版本
 
-      # 设置 Node.js 版本
+      # 設置 Node.js 環境
       - name: Setup Node.js environment
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4  # 升級到最新版本
         with:
           node-version: "18.20.3"
-      # 安装yarn
-      - name: Install yarn
-        run: npm i yarn -g
+          cache: "yarn"  # 啟用 Yarn 緩存
+          cache-dependency-path: documents/yarn.lock  # 指定 Yarn 鎖定文件路徑
 
-      # 如果缓存没有命中，安装依赖
+      # 安裝 Yarn
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      # 安裝依賴
       - name: Install dependencies
         run: cd documents && yarn install
 
-      # 生成静态文件
+      # 生成靜態文件
       - name: Build
         run: cd documents && yarn docs:build
 
       # 部署到 GitHub Pages
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v2
-        env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # ACCESS_TOKEN 是创建的 Secret 名称，替换为你自己创建的名称
         with:
-          target-branch: gh-pages # 部署到 gh-pages 分支，master 分支存放的是项目源码，而 gh-pages 分支则用来存放生成的静态文件
-          build_dir: documents/docs/.vitepress/dist # vuepress 生成的静态文件存放的地方
+          target_branch: gh-pages  # 修正為 target_branch
+          build_dir: documents/docs/.vitepress/dist
+          keep_history: false
+          allow_empty_commit: true
+          jekyll: true
+          dry_run: false
+          verbose: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
