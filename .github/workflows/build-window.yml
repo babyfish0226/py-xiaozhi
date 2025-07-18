@@ -43,26 +43,18 @@ jobs:
         shell: powershell
 
       # 查找 ISCC.exe 路径并更新 build.json
-      - name: 查找 ISCC.exe 路径并更新 build.json
+           - name: 查找 ISCC.exe 路径并更新 build.json
         run: |
-          # 获取 ISCC 路径
           $isccPath = Get-Command ISCC.exe | Select-Object -ExpandProperty Source
-          
-          # 设置环境变量
-          $envLine = "ISCC_PATH=$($isccPath -replace '`r','' -replace '`n','')"
+          $envLine = "ISCC_PATH=$($isccPath)"
           [System.IO.File]::AppendAllText($env:GITHUB_ENV, "$envLine`n", [System.Text.Encoding]::UTF8)
-          
-          # 读取 JSON 内容
+
           $jsonPath = "build.json"
           $json = Get-Content $jsonPath -Raw | ConvertFrom-Json
-          
-          # 设置新的 Inno Setup 路径
+
           $json.inno_setup_path = $isccPath
-          
-          # 写回 JSON 文件，格式化为 UTF-8 编码
+
           $json | ConvertTo-Json -Depth 10 | Out-File -FilePath $jsonPath -Encoding UTF8
-          
-          Write-Host "已更新 build.json 中的 Inno Setup 路径为: $isccPath"
         shell: powershell
 
       # 安装 Miniconda 和 Conda
